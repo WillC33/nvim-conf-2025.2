@@ -2,9 +2,11 @@ require("config.globals")
 require("config.lazy")
 require("config.options")
 require("config.mappings").setup()
+require("config.autocmd").setup()
 
 -- Finally load transparency to prevent overriding
 vim.cmd([[
+  colorscheme melange
   highlight LineNr guifg=NONE guibg=NONE
   highlight SignColumn guifg=NONE guibg=NONE
   highlight EndOfBuffer guifg=NONE guibg=NONE
