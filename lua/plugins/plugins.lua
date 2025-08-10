@@ -123,5 +123,16 @@ return {
   },
 
   -- Theme
-  { "savq/melange-nvim" }
+  {
+    "WillC33/heathglass.nvim",
+    lazy = false,
+    priority = 1000,
+    config = function()
+      local heathglass = require("heathglass")
+      heathglass.setup({
+        transparent = true,
+        terminal_colors = true,
+      })
+    end,
+  }
 }
