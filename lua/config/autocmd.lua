@@ -49,6 +49,32 @@ function M.setup()
       vim.fn.mkdir(vim.fn.fnamemodify(file, ':p:h'), 'p')
     end,
   })
+
+
+  -- Auto run Credo
+  vim.api.nvim_create_autocmd("BufWritePost", {
+    pattern = "*.{ex,exs}",
+    callback = function()
+      -- Only run if in an Elixir project
+      if vim.fn.filereadable("mix.exs") == 1 then
+        -- Run silently and show only if there are issues
+        vim.fn.jobstart({ 'mix', 'credo', '--format', 'oneline' }, {
+          on_stdout = function(_, data)
+            local has_issues = false
+            for _, line in ipairs(data) do
+              if line:match("^[^:]+:") then
+                has_issues = true
+                break
+              end
+            end
+            if has_issues then
+              vim.notify("Credo found issues. Run :Credo for details", vim.log.levels.WARN)
+            end
+          end
+        })
+      end
+    end
+  })
 end
 
 return M

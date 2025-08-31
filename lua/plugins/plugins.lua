@@ -8,7 +8,8 @@ return {
     "mason-org/mason-lspconfig.nvim",
     opts = {
       ensure_installed = {
-        "elixirls",    -- Elixir
+        --"expert",      -- Elixir
+        "elixirls",
         "ts_ls",       -- TypeScript/JavaScript
         "svelte",      -- Svelte
         "tailwindcss", -- Tailwind CSS
@@ -47,6 +48,9 @@ return {
       lspconfig.html.setup({})
       lspconfig.tailwindcss.setup({})
       lspconfig.svelte.setup({})
+
+      -- Elixir Expert (waiting for Dialyzer)
+      -- vim.lsp.enable('expert')
     end
   },
 
@@ -91,6 +95,44 @@ return {
   {
     "nvim-telescope/telescope-fzf-native.nvim",
     build = "make"
+  },
+
+  {
+    "hrsh7th/nvim-cmp",
+    dependencies = {
+      "hrsh7th/cmp-buffer",
+      "hrsh7th/cmp-nvim-lsp"
+    },
+    config = function()
+      local cmp = require('cmp')
+      cmp.setup({
+        completion = {
+          autocomplete = { require('cmp.types').cmp.TriggerEvent.TextChanged },
+          keyword_length = 3,
+        },
+        sources = {
+          -- Buffer ONLY during auto-complete
+          { name = 'buffer', keyword_length = 2 }
+        },
+        mapping = {
+          ['<C-Space>'] = cmp.mapping(function(fallback)
+            -- Manual trigger: show BOTH buffer + LSP
+            cmp.complete({
+              config = {
+                sources = {
+                  { name = 'nvim_lsp' },
+                  { name = 'buffer' }
+                }
+              }
+            })
+          end),
+          ['<CR>'] = cmp.mapping.confirm({ select = true }),
+          ['<C-e>'] = cmp.mapping.abort(),
+          ['<Tab>'] = cmp.mapping.select_next_item(),
+          ['<S-Tab>'] = cmp.mapping.select_prev_item(),
+        },
+      })
+    end
   },
 
   -- File Management
