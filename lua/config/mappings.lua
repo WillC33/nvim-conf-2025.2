@@ -20,6 +20,11 @@ local function handle_lsp_stab()
   end
 end
 
+local function yank_filepath()
+  vim.fn.setreg('+', vim.fn.expand('%:p'))
+  vim.notify('Copied: ' .. vim.fn.expand('%:p'))
+end
+
 function M.setup()
   -- File Management
   set_keymap("n", "<leader>e", function()
@@ -85,6 +90,7 @@ function M.setup()
   -- General mappings
   set_keymap("i", "jk", "<Esc>", "Escape insert mode")
   set_keymap({ "v", "x" }, "<leader>y", '"+y', "Yank to system clipboard")
+  set_keymap("n", "<leader>yf", yank_filepath, "Yank buffer filepath to clipboard")
   set_keymap("n", "<leader>p", '"+p', "Paste from system clipboard")
   set_keymap("i", "<C-Space>", "<C-x><C-o>", "Open module suggestions")
   -- Navigate suggestions
