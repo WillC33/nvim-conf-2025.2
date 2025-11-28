@@ -40,14 +40,17 @@ return {
         vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
       end
 
-      -- Manual fallback configs for servers that need them
-      local lspconfig = require('lspconfig')
+      local configs = {
+        cssls = {},
+        html = {},
+        tailwindcss = {},
+        svelte = {},
+      }
 
-      -- These might need manual setup
-      lspconfig.cssls.setup({})
-      lspconfig.html.setup({})
-      lspconfig.tailwindcss.setup({})
-      lspconfig.svelte.setup({})
+      for server, config in pairs(configs) do
+        vim.lsp.config(server, config)
+        vim.lsp.enable(server)
+      end
 
       -- Elixir Expert (waiting for Dialyzer)
       -- vim.lsp.enable('expert')

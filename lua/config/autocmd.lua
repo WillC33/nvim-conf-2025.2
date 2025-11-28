@@ -75,6 +75,20 @@ function M.setup()
       end
     end
   })
+
+  -- Diff/Merge mode keybinds
+  vim.api.nvim_create_autocmd("BufEnter", {
+    group = vim.api.nvim_create_augroup('DiffMode', { clear = true }),
+    callback = function()
+      if vim.wo.diff then
+        vim.keymap.set("n", "<leader>1", ":diffget LOCAL<CR>", { buffer = true, desc = "Get from LOCAL" })
+        vim.keymap.set("n", "<leader>2", ":diffget BASE<CR>", { buffer = true, desc = "Get from BASE" })
+        vim.keymap.set("n", "<leader>3", ":diffget REMOTE<CR>", { buffer = true, desc = "Get from REMOTE" })
+        vim.keymap.set("n", "]c", "]c", { buffer = true, desc = "Next conflict" })
+        vim.keymap.set("n", "[c", "[c", { buffer = true, desc = "Previous conflict" })
+      end
+    end,
+  })
 end
 
 return M
